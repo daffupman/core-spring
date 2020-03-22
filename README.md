@@ -35,3 +35,9 @@
 - core-spring项目的架构
     ![](https://raw.githubusercontent.com/daffupman/markdown-img/master/20200321172239.png)
     
+    框架具备的基本功能：
+    
+    - 解析配置
+    - 定位和注册对象
+    - 注入对象
+    - 提供通用的工具类
