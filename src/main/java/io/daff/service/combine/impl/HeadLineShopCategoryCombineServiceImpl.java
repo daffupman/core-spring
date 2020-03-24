@@ -6,6 +6,7 @@ import io.daff.entity.dto.MainPageInfoDto;
 import io.daff.service.combine.HeadLineShopCategoryCombineService;
 import io.daff.service.solo.HeadLineService;
 import io.daff.service.solo.ShopCategoryService;
+import mini.springframework.core.annotation.Service;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author daffupman
  * @since 2020/3/22
  */
+@Service
 public class HeadLineShopCategoryCombineServiceImpl
         implements HeadLineShopCategoryCombineService {
 
