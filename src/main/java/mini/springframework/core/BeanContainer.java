@@ -11,10 +11,7 @@ import mini.springframework.util.ClassUtil;
 import mini.springframework.util.ValidationUtil;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -94,5 +91,82 @@ public class BeanContainer {
             }
         }
         loaded = true;
+    }
+
+    /**
+     * 添加一个class对象及其Bean实例
+     */
+    public Object addBean(Class<?> clazz, Object bean) {
+        return beanMap.put(clazz, bean);
+    }
+
+    /**
+     * 移除一个IOC容器管理的对象
+     */
+    public Object removeBean(Class<?> clazz) {
+        return beanMap.remove(clazz);
+    }
+
+    /**
+     * 获取Bean实例
+     */
+    public Object getBean(Class<?> clazz) {
+        return beanMap.get(clazz);
+    }
+
+    /**
+     * 获取容器管理的所有Class对象集合
+     */
+    public Set<Class<?>> getClasses() {
+        return beanMap.keySet();
+    }
+
+    /**
+     * 获取所有Bean集合
+     */
+    public Set<Object> getBeans() {
+        return new HashSet<>(beanMap.values());
+    }
+
+    /**
+     * 根据注解筛选出Bean的Class集合
+     */
+    public Set<Class<?>> getClassesByAnnotation(Class<? extends Annotation> annotation) {
+        // 1、获取beanMap的所有class对象
+        Set<Class<?>> keySet = getClasses();
+        if (ValidationUtil.isEmpty(keySet)) {
+            log.warn("nothing in beanMap");
+            return null;
+        }
+        // 2、通过注解筛选被注解标记的class对象，并添加classSet里
+        Set<Class<?>> classSet = new HashSet<>();
+        for (Class<?> clazz : keySet) {
+            if (clazz.isAnnotationPresent(annotation)) {
+                classSet.add(clazz);
+            }
+        }
+        return classSet;
+    }
+
+    /**
+     * 通过接口和父类获取实现类或者子类的Class集合，不包括其本身
+     */
+    public Set<Class<?>> getClassesBySuper(Class<?> interfaceOrClass) {
+        // 1、获取beanMap的所有class对象
+        Set<Class<?>> keySet = getClasses();
+        if (ValidationUtil.isEmpty(keySet)) {
+            log.warn("nothing in beanMap");
+            return null;
+        }
+        // 2、判断keySet里面的元素是否是传入的接口或者类子类，如果是，就将其添加到classSet里
+        Set<Class<?>> classSet = new HashSet<>();
+        for (Class<?> clazz : keySet) {
+            // 判断keySet里的元素是否是传入的接口或者类的子类
+            if (interfaceOrClass.isAssignableFrom(clazz)
+                    && clazz.equals(interfaceOrClass)) {
+                classSet.add(clazz);
+            }
+        }
+        return classSet.size() > 0 ? classSet : null;
     }
 }
