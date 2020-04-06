@@ -163,7 +163,7 @@ public class BeanContainer {
         for (Class<?> clazz : keySet) {
             // 判断keySet里的元素是否是传入的接口或者类的子类
             if (interfaceOrClass.isAssignableFrom(clazz)
-                    && clazz.equals(interfaceOrClass)) {
+                    && !clazz.equals(interfaceOrClass)) {
                 classSet.add(clazz);
             }
         }

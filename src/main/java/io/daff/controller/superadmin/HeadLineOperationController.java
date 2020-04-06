@@ -4,6 +4,7 @@ import io.daff.entity.bo.HeadLine;
 import io.daff.entity.dto.Result;
 import io.daff.service.solo.HeadLineService;
 import mini.springframework.core.annotation.Controller;
+import mini.springframework.inject.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import java.util.List;
 @Controller
 public class HeadLineOperationController {
 
+    @Autowired
     private HeadLineService headLineService;
 
     public Result<Boolean> addHeadLine(HttpServletRequest req, HttpServletResponse resp) {

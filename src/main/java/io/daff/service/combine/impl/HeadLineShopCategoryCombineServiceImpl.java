@@ -7,6 +7,7 @@ import io.daff.service.combine.HeadLineShopCategoryCombineService;
 import io.daff.service.solo.HeadLineService;
 import io.daff.service.solo.ShopCategoryService;
 import mini.springframework.core.annotation.Service;
+import mini.springframework.inject.annotation.Autowired;
 
 import java.util.List;
 
@@ -15,10 +16,11 @@ import java.util.List;
  * @since 2020/3/22
  */
 @Service
-public class HeadLineShopCategoryCombineServiceImpl
-        implements HeadLineShopCategoryCombineService {
+public class HeadLineShopCategoryCombineServiceImpl implements HeadLineShopCategoryCombineService {
 
+    @Autowired
     private HeadLineService headLineService;
+    @Autowired
     private ShopCategoryService shopCategoryService;
 
     @Override
