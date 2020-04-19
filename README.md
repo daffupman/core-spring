@@ -122,3 +122,60 @@
 
     - 组件扫描：自动发现应用容器中需要创建的Bean；
     - 自动装配：自动满足Bean之间的依赖；
+    
+- AbstractApplicationContext.refresh()
+
+    - 后置处理器PostProcessor
+    
+        本身也是一个注入到容器中的Bean（即需要加上@Bean注解），里面的方法会在特定的时机被容器调用。可以在不改变容器或Bean核心逻辑的情况下对Bean进行拓展，如：对Bean包装，属性设置，内容修改，对象代理，甚至替换掉整个bean。
+        
+        PostProcessor的种类：
+        
+        - 容器级别：BeanFactoryPostProcessor和BeanDefinitionRegistryPostProcessor
+        - Bean级别：BeanPostProcessor
+        
+    - Aware接口及其子接口
+    
+    从Bean里获取到容器实例并对其操作。Aware接口里面没有定义任何方法，只是一个标记。其子类有：
+    
+    - ApplicationContextAware：提供的setApplicationContext方法将提供ApplicationContext类型的参数供该接口的实现类使用；
+    - MessageSourceAware：
+    - ApplicationEventPublisherAware：
+    - BeanFactoryAware：
+    - ResourceLoaderAware：
+    - BeanNameAware：提供的setBeanName方法将提供Bean的名称给该接口的实现类使用；
+    
+    - 事件监听器模式
+    
+    回调函数：往组件注册自定义的方法以便组件在特定场景下调用。监听器会监听某个事件，一旦事件触发，会立刻作出响应。事件监听器的三要素：
+    
+    - 事件源（Event Source）
+    - 事件监听器（Event Listener）:注册在事件源上，用于监听事件，处理或转发
+    - 事件对象（Event Object）：负责事件源和事件监听器之间的信息传递
+    
+    Spring事件驱动模型由三大组成部分：
+    
+    - 事件：ApplicationEvent抽象类，继承jdk的EventObject，通过source获取事件源，一般是容器本身。ApplicationContextEvent抽象类为ApplicationEvent的子类，其子类有：
+        
+        - ContextClosedEvent：容器停止时触发的事件
+        - ContextRefreshedEvent：容器刷新时触发的事件
+        - ContextStoppedEvent：容器停止时触发的事件
+        - ContextStartedEvent：容器启动时触发的事件
+        
+    - 事件监听器：ApplicationListener
+    - 事件发布器：Publisher以及Multicaster
+    
+    执行流程：
+    
+    - prepareRefresh：刷新前的工作准备；
+    - obtainFreshBeanFactory：获取子类刷新后的内部beanFactory实例；
+    - prepareBeanFactory：为容器注册必要的系统级别的Bean；
+    - postProcessBeanFactory：允许容器的子类去注册postProcessor；
+    - invokeBeanFactoryPostProcessor：调用容器注册的容器基本的后置处理器；
+    - registryBeanPostProcessors：向容器注册Bean级别的后置处理器；
+    - initMessageSource：初始化国际化配置；
+    - initApplicationEventMulticaster：初始化事件发布者组件；
+    - onRefresh：在单例Bean初始化之前预留给子类初始化其他特殊bean的口子；
+    - finishBeanFactoryInitialization：设置系统级别的服务，实例化所有非懒加载的单例；
+    - finishRefresh：触发初始化完成的回调方法，并发布容器刷新完成的事件给监听者；
+    - resetCommonCaches：重置Spring内核中的共用缓存。
