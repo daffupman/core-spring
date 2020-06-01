@@ -179,3 +179,58 @@
     - finishBeanFactoryInitialization：设置系统级别的服务，实例化所有非懒加载的单例；
     - finishRefresh：触发初始化完成的回调方法，并发布容器刷新完成的事件给监听者；
     - resetCommonCaches：重置Spring内核中的共用缓存。
+    
+## 依赖注入
+
+Spring在Bean实例的创建过程中做了很多精细化控制。
+
+### 依赖注入过程
+
+#### AbstractBeanFactory#doGetBean：获取Bean实例
+
+- 尝试从三级中缓存获取Bean
+    
+    Bean可以是普通的Bean，也可以是FactoryBean。如果是Bean实例则直接返回；如果是FactoryBean，则会调用getObject方法返回Bean实例。
+    
+- 循环依赖的判断
+
+    如果中缓存中没有获取到Bean，那么会让容器去创建Bean。在创建之前会先判断是否有循环依赖，如果有循环依赖，那么会使用三级缓存来解决。
+
+- 递归去父容器获取Bean实例
+
+    如果当前容器中没有注册该Bean的BeanDefinition实例，父BeanFactory中去查找。
+
+- 从当前容器获取Bean实例
+
+    如果容器中有这个BeanDefinition，那么直接获取。
+
+- 递归实例化显式依赖的Bean
+
+    如果这个Bean设置了depends-on属性，即需要先实例化depends-on的属性。
+
+- 根据不同的Scope采用不同的策略创建Bean实例
+
+- 对Bean进行类型可选的检查
+
+#### DefaultSingletonRegistry#getSingleton：获取单例实例。三级缓存解决循环依赖
+
+#### AbstractAutowireCapableBeanFactory
+
+##### createBean：创建Bean实例的准备
+
+- Bean类型解析
+- 处理方法覆盖
+- Bean实例化前的后置处理
+- doCreateBean
+
+##### doCreateBean：创建Bean实例
+
+##### applyMergedBeanDefinitionPostProcessors：处理@Autowired以及@Value
+
+##### populateBean：给Bean实例注入属性值（依赖注入）
+
+#### AutowiredAnnotationBeanPostProcessor#postProcessorProperties：Autowired的依赖注入逻辑
+
+#### DefaultListableBeanFactory#doResolveDependency：依赖解析
+
+#### DependencyDescriptor#injectionPoint：创建依赖实例
