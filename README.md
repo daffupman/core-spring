@@ -225,9 +225,27 @@ Spring在Bean实例的创建过程中做了很多精细化控制。
 
 ##### doCreateBean：创建Bean实例
 
+- 创建无属性的Bean实例
+    - 创建Bean实例（工厂方法、含参构造器注入、无参构造器注入）
+        - BeanWrapper接口：提供了修改Bean属性的方法
+    - 记录下被@Autowired或者@Value标记上的方法和成员变量
+    - 是否允许提前暴露
+    - 填充bean属性
+    - initializeBean
+    - 注册相关销毁逻辑
+    - 返回创建好的实例
+
 ##### applyMergedBeanDefinitionPostProcessors：处理@Autowired以及@Value
 
 ##### populateBean：给Bean实例注入属性值（依赖注入）
+
+总的理念： 调用Bean的Setter方法实例去给Bean设置上属性值；变量类型的转换，同时还要考虑处理集合类型的情况
+
+- postProcessAfterInstantiation：在设置属性前区修改Bean状态，也可以控制是否继续给Bean设置属性值
+- 注入属性到PropertyValues中（按名字装配、按类型装配）
+- postProcessPropertyValues：对解析完但未设置的属性进行再处理
+- 是否进行依赖检查
+- 将PropertyValues中的属性值设置到BeanWrapper中
 
 #### AutowiredAnnotationBeanPostProcessor#postProcessorProperties：Autowired的依赖注入逻辑
 
