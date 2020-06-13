@@ -3,6 +3,7 @@ package mini.springframework.core;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mini.springframework.aop.annotation.Aspect;
 import mini.springframework.core.annotation.Component;
 import mini.springframework.core.annotation.Controller;
 import mini.springframework.core.annotation.Repository;
@@ -33,7 +34,7 @@ public class BeanContainer {
      * 加载Bean的注解列表
      */
     private static final List<Class<? extends Annotation>> BEAN_ANNOTATION = Arrays.asList(
-            Component.class, Controller.class, Service.class, Repository.class
+            Component.class, Controller.class, Service.class, Repository.class, Aspect.class
     );
 
     public static BeanContainer getInstance() {

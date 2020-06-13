@@ -252,3 +252,69 @@ Spring在Bean实例的创建过程中做了很多精细化控制。
 #### DefaultListableBeanFactory#doResolveDependency：依赖解析
 
 #### DependencyDescriptor#injectionPoint：创建依赖实例
+
+## AOP
+
+关注点分离（Concern Separation）：不同的问题交给不同的部分去解决，每部分专注解决自己的问题。
+
+单个Aspect的执行顺序：
+
+![](https://raw.githubusercontent.com/daffupman/markdown-img/master/20200610225813.png)
+
+多个Aspect的执行顺序：
+
+![](https://raw.githubusercontent.com/daffupman/markdown-img/master/20200610225956.png)
+
+- 织入：将Aspect模块化的横切关注点集成到OOP里
+- 织入器：完成织入过程的执行者，如ajc
+
+### Spring AOP实现原理
+
+![代理模式](https://raw.githubusercontent.com/daffupman/markdown-img/master/20200612223735.png)
+
+- JDK静态代理
+- JDK动态代理
+
+    在JVM加载阶段会完成：
+    1. 通过带有包名的类来获取对应class文件的二进制字节流（ClassLoader#findClass）；
+    2. 根据读取的字节流，将代表的静态存储结构转换为运行时数据结构；
+    3. 在内存中生成一个代表该类的Class对象，作为方法区该类的数据访问入口。
+    
+    JDK提供的动态代理方式，可以在程序运行时动态生成类的字节码，并加载到JVM中。它也要求被代理类实现接口，但是代理类并不需要实现接口。
+    
+    核心接口和类：
+    
+    `java.lang.reflect.InvocationHandler`：实现此接口的类才可具有代理功能。`public Object invoke(Object proxy, Method method, Object[] args) throws Throwable`是该接口的唯一方法，第一个参数代表代理对象，第二参数为被代理对象的方法，第三个为方法的参数。
+    
+    `java.lang.reflect.Proxy`：用来创建动态代理类，其中最重要的一个方法是`public static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces, InvocationHandler h)`。
+    
+- cglib动态代理
+ 
+    对asm框架的封装，需要额外引入jar，代理对象时不要求被代理的对象实现接口。核心类：
+    
+    `net.sf.cglib.proxy.Callback`：该接口没有方法，只是一个标记；
+    `net.sf.cglib.proxy.MethodInterceptor`：相当于InvocationHandler，该接口继承了Callback，包含一个方法`Object intercept(Object var1, Method var2, Object[] var3, MethodProxy var4)`,前三个参数与InvocationHandler#invoke方法的参数意思一样，最后一个参数是对Method对象的代理对象。
+    `net.sf.cglib.proxy.Enhancer`：相当于Proxy，该类包含一个核心方法`public Object create()`,`public static Object create(Class type, Callback callback)`
+    
+- jdk动态代理和cglib动态代理
+    
+    - jdk动态代理：基于反射机制，要求业务类必须实现接口。jdk原生，支持更好。
+    - cglib：基于asm机制实现，生成业务类的子类去作为代理类。被代理类无需实现接口，但需要额外的jar包
+    
+### 自研Aop
+
+#### V1.0
+
+目标：
+
+1. 解决标记的问题，定义横切逻辑的骨架；
+2. 定义Aspect横切逻辑以及被代理方法的执行顺序；
+3. 将横切逻辑织入到被代理的对象以生成动态代理对象；
+
+#### V2.0 AspectJ框架
+
+AspectJ框架的织入时机：静态织入和LTW
+
+- 编译时织入：利用ajc，将切面逻辑织入到类里生成class对象
+- 编译后织入：利用ajc，修改javac编译出的class文件
+- 类加载期织入：利用java agent，在类加载的时候织入切面逻辑

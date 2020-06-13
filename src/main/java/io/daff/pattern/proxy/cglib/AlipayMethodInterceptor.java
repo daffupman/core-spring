@@ -1,0 +1,29 @@
+package io.daff.pattern.proxy.cglib;
+
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+
+import java.lang.reflect.Method;
+
+/**
+ * @author daffupman
+ * @since 2020/6/13
+ */
+public class AlipayMethodInterceptor implements MethodInterceptor {
+
+    @Override
+    public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+        beforePay();
+        Object result = methodProxy.invokeSuper(proxy, args);
+        afterPay();
+        return result;
+    }
+
+    private void beforePay() {
+        System.out.println("从招行取款");
+    }
+
+    private void afterPay() {
+        System.out.println("支付给imooc");
+    }
+}

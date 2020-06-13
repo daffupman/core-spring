@@ -2,6 +2,7 @@ package io.daff.service.solo.impl;
 
 import io.daff.entity.bo.HeadLine;
 import io.daff.service.solo.HeadLineService;
+import lombok.extern.slf4j.Slf4j;
 import mini.springframework.core.annotation.Service;
 
 import java.util.List;
@@ -11,10 +12,12 @@ import java.util.List;
  * @since 2020/3/22
  */
 @Service
+@Slf4j
 public class HeadLineServiceImpl implements HeadLineService {
 
     @Override
     public Boolean addHeadLine(HeadLine headLine) {
+        log.info("执行HeadLineServiceImpl#addHeadLine方法");
         return null;
     }
 
