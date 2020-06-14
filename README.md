@@ -318,3 +318,17 @@ AspectJ框架的织入时机：静态织入和LTW
 - 编译时织入：利用ajc，将切面逻辑织入到类里生成class对象
 - 编译后织入：利用ajc，修改javac编译出的class文件
 - 类加载期织入：利用java agent，在类加载的时候织入切面逻辑
+
+#### Spring AOP
+
+总体流程：
+
+- 注册解析AOP服务
+- 解析和加载横切逻辑
+- 将横切逻辑织入到目标Bean中
+
+使用@EnableAspectJAutoProxy注解可以让spring具备aspectj的功能。该注解上标有 `@Import(AspectJAutoProxyRegistrar)`，引入的 `AspectJAutoProxyRegistrar` 就是Spring Aop的入口。
+
+AspectJAutoProxyRegistrar实现了ImportBeanDefinitionRegistrar接口，重要方法为 `registerBeanDefinition` 。
+
+`AutoProxyCreator`：

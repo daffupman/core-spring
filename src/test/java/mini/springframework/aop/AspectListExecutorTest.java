@@ -18,11 +18,11 @@ public class AspectListExecutorTest {
     @Test
     public void testSorted() {
         List<AspectInfo> aspectInfoList = Arrays.asList(
-                new AspectInfo(4, new MockAspect2()),
-                new AspectInfo(1, new MockAspect5()),
-                new AspectInfo(3, new MockAspect3()),
-                new AspectInfo(2, new MockAspect4()),
-                new AspectInfo(5, new MockAspect1())
+                new AspectInfo(4, new MockAspect2(), null),
+                new AspectInfo(1, new MockAspect5(), null),
+                new AspectInfo(3, new MockAspect3(), null),
+                new AspectInfo(2, new MockAspect4(), null),
+                new AspectInfo(5, new MockAspect1(), null)
         );
 
         AspectListExecutor aspectListExecutor = new AspectListExecutor(

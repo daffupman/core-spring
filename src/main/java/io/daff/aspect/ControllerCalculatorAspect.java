@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import mini.springframework.aop.annotation.Aspect;
 import mini.springframework.aop.annotation.Order;
 import mini.springframework.aop.aspect.DefaultAspect;
-import mini.springframework.core.annotation.Controller;
 
 import java.lang.reflect.Method;
 
@@ -12,7 +11,7 @@ import java.lang.reflect.Method;
  * @author daffupman
  * @since 2020/6/13
  */
-@Aspect(Controller.class)
+@Aspect(pointcut = "execution(* io.daff.controller.frontend..*.*(..))")
 @Order(0)
 @Slf4j
 public class ControllerCalculatorAspect extends DefaultAspect {

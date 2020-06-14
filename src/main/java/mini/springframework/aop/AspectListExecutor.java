@@ -45,9 +45,9 @@ public class AspectListExecutor implements MethodInterceptor {
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
 
         Object returnValue = null;
-
+        collectAccurateMatchedAspectList(method);
         if (ValidationUtil.isEmpty(sortedAspectInfoList)) {
-            return null;
+            return methodProxy.invokeSuper(proxy, args);
         }
 
         // 按照order的顺序升序执行所有before方法
@@ -64,9 +64,17 @@ public class AspectListExecutor implements MethodInterceptor {
         return returnValue;
     }
 
-    // 如果代理类异常返回，则按order顺序倒序执行所有afterThrowing方法
-    private void invokeAfterThrowingAdvices(Method method, Object[] args, Exception e) {
+    private void collectAccurateMatchedAspectList(Method method) {
+        if (ValidationUtil.isEmpty(this.sortedAspectInfoList)) { return; }
+        // 移除不精确匹配的AspectInfo
+        this.sortedAspectInfoList.removeIf(each -> !each.getPointcutLocator().accurateMatches(method));
+    }
 
+    // 如果代理类异常返回，则按order顺序倒序执行所有afterThrowing方法
+    private void invokeAfterThrowingAdvices(Method method, Object[] args, Exception e) throws Throwable {
+        for (int i =  sortedAspectInfoList.size() - 1; i >=0 ; i--){
+            sortedAspectInfoList.get(i).getAspectObject().afterThrowing(targetClass, method, args, e);
+        }
     }
 
     private Object invokeAfterReturningAdvices(Method method, Object[] args, Object returnValue) throws Throwable {

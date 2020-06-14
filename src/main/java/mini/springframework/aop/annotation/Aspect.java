@@ -12,8 +12,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Aspect {
 
-    /**
-     * 将Aspect的切面逻辑注入到value注解标记的类上
-     */
-    Class<? extends Annotation> value();
+    // /**
+    //  * 将Aspect的切面逻辑注入到value注解标记的类上
+    //  */
+    // Class<? extends Annotation> value();
+
+    String pointcut();
 }
