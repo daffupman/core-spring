@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +15,7 @@ import java.util.Set;
  * @since 2020/3/22
  */
 @Slf4j
-public class ClassUtil {
+public class ClassUtils {
 
     public static final String FILE_PROTOCOL = "file";
 

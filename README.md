@@ -332,3 +332,16 @@ AspectJ框架的织入时机：静态织入和LTW
 AspectJAutoProxyRegistrar实现了ImportBeanDefinitionRegistrar接口，重要方法为 `registerBeanDefinition` 。
 
 `AutoProxyCreator`：
+
+## MVC
+
+DispatcherServlet
+
+- 解析请求路径和请求方法
+- 依赖容器，建立并维护Controller方法与请求的映射
+- 用合适的Controller方法去处理特定的请求
+
+![MVC架构图](https://raw.githubusercontent.com/daffupman/markdown-img/master/20200614100815.png)
+
+在DispatcherServlet中可以获取http的请求和响应，然后将它们委托给RequestProcessorChain来处理，针对不同的资源请求，会使用不同的RequestProcessor来处理。Render矩阵用来将处理的结果以不同的形式展示出来。
+

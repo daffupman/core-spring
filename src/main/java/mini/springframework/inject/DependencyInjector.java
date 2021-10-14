@@ -3,8 +3,8 @@ package mini.springframework.inject;
 import lombok.extern.slf4j.Slf4j;
 import mini.springframework.core.BeanContainer;
 import mini.springframework.inject.annotation.Autowired;
-import mini.springframework.util.ClassUtil;
-import mini.springframework.util.ValidationUtil;
+import mini.springframework.util.ClassUtils;
+import mini.springframework.util.ValidationUtils;
 
 import java.lang.reflect.Field;
 import java.util.Set;
@@ -30,7 +30,7 @@ public class DependencyInjector {
      */
     public void doIoc() {
         // 1、遍历Bean容器中所有的Class对象
-        if (ValidationUtil.isEmpty(beanContainer.getClasses())) {
+        if (ValidationUtils.isEmpty(beanContainer.getClasses())) {
             log.warn("empty classSet in BeanContainer");
             return;
         }
@@ -38,7 +38,7 @@ public class DependencyInjector {
         for (Class<?> clazz : beanContainer.getClasses()) {
             // 2、遍历Class对象的所有成员变量
             Field[] fields = clazz.getDeclaredFields();
-            if (ValidationUtil.isEmpty(fields)) {
+            if (ValidationUtils.isEmpty(fields)) {
                 continue;
             }
             for (Field field : fields) {
@@ -56,7 +56,7 @@ public class DependencyInjector {
                     } else {
                         // 6、通过反射将对应的成员变量实例注入到成员变量所在类的实例里
                         Object targetBean = beanContainer.getBean(clazz);
-                        ClassUtil.setField(field, targetBean, fieldValue, true);
+                        ClassUtils.setField(field, targetBean, fieldValue, true);
                     }
                 }
             }
@@ -85,8 +85,8 @@ public class DependencyInjector {
      */
     private Class<?> getImplementClass(Class<?> fieldClass, String autowiredValue) {
         Set<Class<?>> classSet = beanContainer.getClassesBySuper(fieldClass);
-        if (!ValidationUtil.isEmpty(classSet)) {
-            if (ValidationUtil.isEmpty(autowiredValue)) {
+        if (!ValidationUtils.isEmpty(classSet)) {
+            if (ValidationUtils.isEmpty(autowiredValue)) {
                 // @Autowired标签中没有配置value值
                 if (classSet.size() == 1) {
                     return classSet.iterator().next();

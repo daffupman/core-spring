@@ -18,6 +18,9 @@ public class Result<T> {
     // 本次请求返回的结果集
     private T data;
 
+    public Result() {
+    }
+
     public Result(T data) {
         this.code = 200;
         this.msg = "success";

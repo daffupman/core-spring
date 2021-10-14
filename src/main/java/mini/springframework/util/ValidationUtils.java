@@ -7,7 +7,7 @@ import java.util.Map;
  * @author daffupman
  * @since 2020/3/24
  */
-public class ValidationUtil {
+public class ValidationUtils {
 
     /**
      * String是否为空

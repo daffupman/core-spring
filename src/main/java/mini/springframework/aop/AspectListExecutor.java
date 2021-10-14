@@ -2,7 +2,7 @@ package mini.springframework.aop;
 
 import lombok.Getter;
 import mini.springframework.aop.aspect.AspectInfo;
-import mini.springframework.util.ValidationUtil;
+import mini.springframework.util.ValidationUtils;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -21,12 +21,12 @@ public class AspectListExecutor implements MethodInterceptor {
     /**
      * 被代理的类
      */
-    private Class<?> targetClass;
+    private final Class<?> targetClass;
     /**
      * 给被代理类织入的切面，已按order排好序
      */
     @Getter
-    private List<AspectInfo> sortedAspectInfoList;
+    private final List<AspectInfo> sortedAspectInfoList;
 
     public AspectListExecutor(Class<?> targetClass, List<AspectInfo> aspectInfoList) {
         this.targetClass = targetClass;
@@ -46,7 +46,7 @@ public class AspectListExecutor implements MethodInterceptor {
 
         Object returnValue = null;
         collectAccurateMatchedAspectList(method);
-        if (ValidationUtil.isEmpty(sortedAspectInfoList)) {
+        if (ValidationUtils.isEmpty(sortedAspectInfoList)) {
             return methodProxy.invokeSuper(proxy, args);
         }
 
@@ -65,7 +65,7 @@ public class AspectListExecutor implements MethodInterceptor {
     }
 
     private void collectAccurateMatchedAspectList(Method method) {
-        if (ValidationUtil.isEmpty(this.sortedAspectInfoList)) { return; }
+        if (ValidationUtils.isEmpty(this.sortedAspectInfoList)) { return; }
         // 移除不精确匹配的AspectInfo
         this.sortedAspectInfoList.removeIf(each -> !each.getPointcutLocator().accurateMatches(method));
     }

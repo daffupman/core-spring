@@ -28,7 +28,8 @@ public class HeadLineShopCategoryCombineServiceImpl implements HeadLineShopCateg
         // 获取头条列表
         HeadLine headLineCondition = new HeadLine();
         headLineCondition.setEnableStatus(1);
-        List<HeadLine> headLineList = headLineService.queryHeadLine(headLineCondition, 1, 4);
+        List<HeadLine> headLineList = null;
+        // List<HeadLine> headLineList = headLineService.queryHeadLine(headLineCondition, 1, 4);
 
         // 获取店铺类别列表
         ShopCategory shopCategoryCondition = new ShopCategory();

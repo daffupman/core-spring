@@ -14,7 +14,7 @@ import mini.springframework.aop.PointcutLocator;
 @Getter
 public class AspectInfo {
 
-    private int orderIndex;
-    private DefaultAspect aspectObject;
-    private PointcutLocator pointcutLocator;
+    private final int orderIndex;
+    private final DefaultAspect aspectObject;
+    private final PointcutLocator pointcutLocator;
 }

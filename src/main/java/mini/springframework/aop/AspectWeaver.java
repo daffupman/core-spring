@@ -5,7 +5,7 @@ import mini.springframework.aop.annotation.Order;
 import mini.springframework.aop.aspect.AspectInfo;
 import mini.springframework.aop.aspect.DefaultAspect;
 import mini.springframework.core.BeanContainer;
-import mini.springframework.util.ValidationUtil;
+import mini.springframework.util.ValidationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class AspectWeaver {
 
-    private BeanContainer beanContainer;
+    private final BeanContainer beanContainer;
 
     public AspectWeaver() {
         this.beanContainer = BeanContainer.getInstance();
@@ -27,7 +27,7 @@ public class AspectWeaver {
         // 获取所有的切面类
         Set<Class<?>> aspectSet = beanContainer.getClassesByAnnotation(Aspect.class);
         // 拼装AspectInfoList
-        if (ValidationUtil.isEmpty(aspectSet)) { return; }
+        if (ValidationUtils.isEmpty(aspectSet)) { return; }
         List<AspectInfo> aspectInfoList = packAspectInfoList(aspectSet);
         // 遍历容器里的类
         Set<Class<?>> classSet = beanContainer.getClasses();
@@ -41,7 +41,7 @@ public class AspectWeaver {
     }
 
     private void wrapIfNeccessary(List<AspectInfo> roughMatchedAspectList, Class<?> targetClass) {
-        if (ValidationUtil.isEmpty(roughMatchedAspectList)) { return; }
+        if (ValidationUtils.isEmpty(roughMatchedAspectList)) { return; }
         AspectListExecutor aspectListExecutor = new AspectListExecutor(targetClass, roughMatchedAspectList);
         Object proxyBean = ProxyCreator.createProxy(targetClass, aspectListExecutor);
         beanContainer.addBean(targetClass, proxyBean);

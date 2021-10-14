@@ -1,6 +1,7 @@
 package io.daff.service.solo;
 
 import io.daff.entity.bo.HeadLine;
+import io.daff.entity.dto.Result;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface HeadLineService {
     Boolean removeHeadLine(Integer headLineId);
     Boolean modifyHeadLine(HeadLine headLine);
     HeadLine queryHeadLineById(Integer headLineId);
-    List<HeadLine> queryHeadLine(HeadLine headLineCondition,
-                                 Integer pageIndex,
-                                 Integer pageSize);
+    Result<List<HeadLine>> queryHeadLine(HeadLine headLineCondition,
+                                         Integer pageIndex,
+                                         Integer pageSize);
 }
